@@ -27,16 +27,16 @@ public class UserDTO {
     private String citizenIdentificationNumber;
     private String name;
     private String password;
-    private String bithday;
+    private String birthday;
     private String email;
-    private String phone;
+    private String phoneNumber;
     private String address;
     private String atm;
     private String publicKey;
     private String privateKey;
     private String token;
     private UserDTO individual;
-    private List<UserDTO> listUserData;
+    private List<UserDTO> listDataUser;
     private Boolean success;
     private String mes;
 

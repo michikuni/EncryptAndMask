@@ -21,8 +21,7 @@ import lombok.Setter;
  *
  * @author minhp
  */
-public class UserEntity {
-    @Getter
+@Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -66,4 +65,5 @@ public class UserEntity {
 
     @Column(columnDefinition = "TEXT")
     private String privateKey;
+
 }
