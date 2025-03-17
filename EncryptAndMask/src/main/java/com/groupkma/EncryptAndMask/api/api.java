@@ -42,7 +42,7 @@ public class api {
     @Autowired
     private JwtUtil jwtUtil;
 
-    @PostMapping("register")
+    @PostMapping("/register")
 	public ResponseEntity<UserDTO> register(@RequestBody UserDTO userDTO) {
 		UserDTO response = userService.register(userDTO);
 		if(response.getSuccess()) {
@@ -51,7 +51,7 @@ public class api {
 			return new ResponseEntity<UserDTO>(response , HttpStatus.BAD_REQUEST);
 	}
 	
-	@PostMapping("login")
+	@PostMapping("/login")
 	public ResponseEntity<UserDTO> login(@RequestBody UserDTO userDTO) {
 		UserDTO response = userService.login(userDTO);
 		if(response.getSuccess()) {
@@ -60,7 +60,7 @@ public class api {
 			return new ResponseEntity<UserDTO>(response , HttpStatus.BAD_REQUEST);
 	}
 	
-	@PutMapping("updateDecentralization")
+	@PutMapping("/updateDecentralization")
 	public ResponseEntity<PermissionDTO> updatePermission(@RequestBody PermissionDTO dto, @RequestHeader("x-auth-token") String token) {
 		PermissionDTO response = permissionService.update(dto, token);
 		if(response.getSuccess()) {
@@ -70,7 +70,7 @@ public class api {
 	}
 	
 	
-	@GetMapping("getDataUsers/{id}")
+	@GetMapping("/getDataUsers/{id}")
 	public ResponseEntity<UserDTO> getAllUser(@PathVariable String id, @RequestHeader("x-auth-token") String token) {
 		UserDTO response = userService.findAll(UserDTO.builder().citizenIdentificationNumber(id).token(token).build());
 		if(response.getSuccess()) {
@@ -79,7 +79,7 @@ public class api {
 			return new ResponseEntity<UserDTO>(response, HttpStatus.BAD_REQUEST);
 	}
 	
-	@GetMapping("getInfPersonal/{id}")
+	@GetMapping("/getInfPersonal/{id}")
 	public ResponseEntity<UserDTO> getInfPersonal(@PathVariable String id, @RequestHeader("x-auth-token") String token) {
 		UserDTO response = userService.findById(UserDTO.builder().citizenIdentificationNumber(id).token(token).build());
 		if(response.getSuccess()) {
@@ -88,16 +88,16 @@ public class api {
 			return new ResponseEntity<UserDTO>(response, HttpStatus.BAD_REQUEST);
 	}
 	
-	@PostMapping("addDecentralization")
-	public ResponseEntity<PermissionDTO> addDecentralization(@RequestBody List<PermissionDTO> dataChange, @RequestHeader("x-auth-token") String token) {
-		PermissionDTO response = permissionService.save(dataChange, token);
-		if(response.getSuccess()) {
-			return new ResponseEntity<PermissionDTO>(response, HttpStatus.OK);
-		}else 
-			return new ResponseEntity<PermissionDTO>(response, HttpStatus.BAD_REQUEST);
-	}
+//	@PostMapping("addDecentralization")
+//	public ResponseEntity<PermissionDTO> addDecentralization(@RequestBody List<PermissionDTO> dataChange, @RequestHeader("x-auth-token") String token) {
+//		PermissionDTO response = permissionService.save(dataChange, token);
+//		if(response.getSuccess()) {
+//			return new ResponseEntity<PermissionDTO>(response, HttpStatus.OK);
+//		}else 
+//			return new ResponseEntity<PermissionDTO>(response, HttpStatus.BAD_REQUEST);
+//	}
 	
-	@PostMapping("deleteDecentralization")
+	@PostMapping("/deleteDecentralization")
 	public ResponseEntity<PermissionDTO> deleteDecentralization(@RequestBody PermissionDTO dto) {
 		PermissionDTO response = permissionService.delete(dto);
 		if(response.getSuccess()) {
@@ -106,12 +106,12 @@ public class api {
 			return new ResponseEntity<PermissionDTO>(response, HttpStatus.BAD_REQUEST);
 	}
 	
-	@PostMapping("logout")
+	@PostMapping("/logout")
 	public ResponseEntity<UserDTO> logout() {
 		return new ResponseEntity<UserDTO>(new UserDTO(), HttpStatus.OK);
 	}
 	
-	@GetMapping("getDecentralization/{id}")
+	@GetMapping("/getDecentralization/{id}")
 	public ResponseEntity<PermissionDTO> getDecentralization(@PathVariable String id) {
 		PermissionDTO response = permissionService.findAllByIdMain(id);
 		return new ResponseEntity<PermissionDTO>(response, HttpStatus.OK);

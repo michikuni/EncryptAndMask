@@ -27,7 +27,7 @@ import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtUtil {
-    public static final String SECRET = "7pX9kR4mW2vJ8tL5qY3nZ6bF0sH7dA1cE4iG9oP2=";
+    public static final String SECRET = "7pX9kR4mW2vJ8tL5qY3nZ6bF0sH7dA1cE4iG9oP2rT8mN5vQ2==";
     public String generateToken(String id, String password){
         Map<String, Object> claims = new HashMap<>();
         claims.put("pass", password);

@@ -38,10 +38,17 @@ public class JwtAuthFilter extends OncePerRequestFilter{
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) 
                 throws ServletException, IOException {
+        String path = request.getRequestURI();
+
+        // Bỏ qua các endpoint public
+        if (path.equals("/login") || path.equals("/register") || 
+            path.equals("/api/user/login") || path.equals("/api/user/register")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         String authHeader = request.getHeader("x-auth-token");
         String token = null;
         String id = null;
-        String pass = null;
         if(authHeader != null){
             token = authHeader;
             id = jwtUtil.extractId(token);
