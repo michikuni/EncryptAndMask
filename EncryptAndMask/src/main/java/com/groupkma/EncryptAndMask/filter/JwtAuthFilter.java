@@ -49,19 +49,46 @@ public class JwtAuthFilter extends OncePerRequestFilter{
         String authHeader = request.getHeader("x-auth-token");
         String token = null;
         String id = null;
-        if(authHeader != null){
+        if(authHeader == null || authHeader.isEmpty()){
+            String cookies = request.getHeader("Cookie");
+            if(cookies != null){
+                String[] cookieArray = cookies.split(";");
+                for(String cookie : cookieArray){
+                    if(cookie.trim().startsWith("x-auth-token")){
+                        token = cookie.trim().substring("x-auth-token=".length());
+                        break;
+                    }
+                }
+            }
+            System.out.println("Token from cookie: " + token);
+        } else {
             token = authHeader;
-            id = jwtUtil.extractId(token);
+            System.out.println("Token from header: " + token);
         }
         
+        if (token != null) {
+            try {
+                id = jwtUtil.extractId(token);
+                System.out.println("Extracted ID: " + id);
+            } catch (Exception e) {
+                System.out.println("Error extracting ID from token: " + e.getMessage());
+            }
+        }
+        
+        // Xác thực người dùng
         if (id != null && SecurityContextHolder.getContext().getAuthentication() == null) { 
             UserDetails detail = service.loadUserByUsername(id); 
             if (jwtUtil.validateToken(token, detail)) { 
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(detail, null, null); 
+                System.out.println("Token validated successfully for user: " + id);
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(detail, null, detail.getAuthorities()); 
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request)); 
                 SecurityContextHolder.getContext().setAuthentication(authToken); 
-            } 
-        } 
+            } else {
+                System.out.println("Token validation failed for user: " + id);
+            }
+        } else {
+            System.out.println("No valid ID or authentication already exists");
+        }
         filterChain.doFilter(request, response); 
     }
 }

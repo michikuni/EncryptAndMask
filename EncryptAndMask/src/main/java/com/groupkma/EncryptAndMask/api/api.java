@@ -22,7 +22,6 @@ import com.groupkma.EncryptAndMask.dto.PermissionDTO;
 import com.groupkma.EncryptAndMask.dto.UserDTO;
 import com.groupkma.EncryptAndMask.service.PermissionService;
 import com.groupkma.EncryptAndMask.service.UserService;
-import com.groupkma.EncryptAndMask.util.JwtUtil;
 
 /**
  *
@@ -39,8 +38,6 @@ public class api {
     @Autowired
     private PermissionService permissionService;
 
-    @Autowired
-    private JwtUtil jwtUtil;
 
     @PostMapping("/register")
 	public ResponseEntity<UserDTO> register(@RequestBody UserDTO userDTO) {

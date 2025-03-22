@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h2 class="text-center mb-4">Sign Up</h2>
+                <form id="signupForm">
+                    <div class="mb-3">
+                        <label for="citizenId" class="form-label">Citizen ID</label>
+                        <input type="text" class="form-control" id="citizenId" required placeholder="eg: 010203001234">
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" required placeholder="eg: Dang Minh Phuong">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                        <input type="password" class="form-control" id="confirmPassword" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="dob" class="form-label">Date of Birth</label>
+                        <input type="text" class="form-control" id="birthday" required placeholder="eg: 20/04/2003">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" required placeholder="eg: a@gmail.com">
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone Number</label>
+                        <input type="text" class="form-control" id="phone" required placeholder="eg: 0123456789">
+                    </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address</label>
+                        <input type="area" class="form-control" id="address" required placeholder="eg: Ha Noi">
+                    </div>
+                    <div class="mb-3">
+                        <label for="atm" class="form-label">ATM</label>
+                        <input type="text" class="form-control" id="atm" required placeholder="eg: MB-9999995552003">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+                </form>
+                <p class="mt-3 text-center">Already have an account? <a th:href="@{/signin}">Sign In</a></p>
+                <div id="message" class="mt-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/signup.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

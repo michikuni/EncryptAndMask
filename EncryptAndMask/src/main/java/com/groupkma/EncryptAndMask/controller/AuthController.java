@@ -6,18 +6,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class AuthController {
 
-    @GetMapping("/login")
-    public String showLogin() {
-        return "login"; // Trả về tên file login.html trong templates/
+    @GetMapping("/signin")
+    public String signin() {
+        return "signin"; // Trả về tên file login.html trong templates/
     }
 
-    @GetMapping("/register")
-    public String showRegister() {
-        return "register";
+    @GetMapping("/signup")
+    public String signup() {
+        return "signup";
     }
 
     @GetMapping("/home")
-    public String showHome() {
+    public String home() {
         return "home";
     }
 }
