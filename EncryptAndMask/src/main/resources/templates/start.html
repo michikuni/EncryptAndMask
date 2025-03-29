@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Start Page</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card p-4">
+                    <h1 class="text-center">Welcome to Encrypt & Mask System</h1>
+                    <p class="text-center mt-3">
+                        This system uses advanced encryption techniques to secure your data.
+                    </p>
+                    <div class="mt-4">
+                        <h3>About AES</h3>
+                        <p>
+                            AES (Advanced Encryption Standard) is a symmetric encryption algorithm that ensures your data is securely encrypted using a single key. It’s fast, reliable, and widely used for protecting sensitive information.
+                        </p>
+                        <h3>About RSA</h3>
+                        <p>
+                            RSA (Rivest-Shamir-Adleman) is an asymmetric encryption algorithm that uses a pair of keys: a public key for encryption and a private key for decryption. It’s ideal for secure data sharing and authentication.
+                        </p>
+                    </div>
+                    <div class="text-center mt-4">
+                        <a href="/signin" class="btn btn-primary mx-2">Sign In</a>
+                        <a href="/signup" class="btn btn-outline-primary mx-2">Sign Up</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/start.js}"></script>
+</body>
+</html>

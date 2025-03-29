@@ -13,8 +13,8 @@ import com.groupkma.EncryptAndMask.dto.UserDTO;
  */
 public interface UserService extends UserDetailsService{
     UserDTO findById(UserDTO dto);
-    UserDTO save(UserDTO dto);
     UserDTO findAll(UserDTO dto);
     UserDTO register(UserDTO dto);
     UserDTO login(UserDTO dto);
+    UserDTO update(UserDTO dto, String token);
 }

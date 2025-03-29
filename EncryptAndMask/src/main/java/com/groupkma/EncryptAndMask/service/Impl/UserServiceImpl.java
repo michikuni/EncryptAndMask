@@ -16,7 +16,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+// import com.groupkma.EncryptAndMask.dto.PermissionDTO;
 import com.groupkma.EncryptAndMask.dto.UserDTO;
+// import com.groupkma.EncryptAndMask.entity.PermissionEntity;
 import com.groupkma.EncryptAndMask.entity.UserDetail;
 import com.groupkma.EncryptAndMask.entity.UserEntity;
 import com.groupkma.EncryptAndMask.repository.UserRepository;
@@ -26,13 +28,14 @@ import com.groupkma.EncryptAndMask.util.EncryptAndDecryptUtil;
 import com.groupkma.EncryptAndMask.util.JwtUtil;
 
 import jakarta.transaction.Transactional;
+
 /**
  *
  * @author minhp
  */
 @Service
 @Transactional
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository repository;
 
@@ -45,14 +48,8 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private EncryptAndDecryptUtil encryptAndDecryptUtil;
 
-    @Autowired 
+    @Autowired
     private JwtUtil jwtUtil;
-
-    @Override
-    public UserDTO save(UserDTO dto) {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
     @Override
     public UserDTO findAll(UserDTO dto) {
@@ -60,22 +57,22 @@ public class UserServiceImpl implements UserService{
         dto.setPassword(jwtUtil.extractPass(dto.getToken()));
         List<UserDTO> dtos = new ArrayList<>();
         List<UserEntity> entities = repository.findAll();
-        if(entities.isEmpty()) {
+        if (entities.isEmpty()) {
             response = UserDTO.builder().success(false).build();
-        }else {
+        } else {
             for (UserEntity userEntity : entities) {
                 UserDTO newDTO;
-                if(userEntity.getCitizenIdentificationNumber().equals(dto.getCitizenIdentificationNumber())) {
+                if (userEntity.getCitizenIdentificationNumber().equals(dto.getCitizenIdentificationNumber())) {
                     newDTO = encryptAndDecryptUtil.decryptAll(userEntity, dto);
-                }else {
+                } else {
                     newDTO = encryptAndDecryptUtil.maskingData(userEntity, dto.getCitizenIdentificationNumber());
                 }
 
                 dtos.add(newDTO);
             }
             response = UserDTO.builder().success(true)
-                            .listDataUser(dtos)
-                            .build();
+                    .listDataUser(dtos)
+                    .build();
         }
 
         return response;
@@ -83,41 +80,60 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserDTO register(UserDTO dto) {
-            UserDTO response = new UserDTO();
-            if(repository.existsById(dto.getCitizenIdentificationNumber()) || repository.existsByAtm(dto.getAtm())
-                            || repository.existsByEmail(dto.getEmail()) || repository.existsByPhoneNumber(dto.getPhoneNumber())) {
-                response.setSuccess(false);
-                response.setMes("Thất bại");
-            }else {
-                UserEntity entity = encryptAndDecryptUtil.encryptAll(mapper.map(dto, UserEntity.class));
-                Map<String, String> keys = rsa.generateKey();
-                entity.setPublicKey(keys.get("public_key"));
-                entity.setPrivateKey(keys.get("private_key"));
-                repository.save(entity);
-                response.setSuccess(true);
-                response.setMes("Thành công");
-            }
-            return response;
+        UserDTO response = new UserDTO();
+        if (repository.existsById(dto.getCitizenIdentificationNumber()) || repository.existsByAtm(dto.getAtm())
+                || repository.existsByEmail(dto.getEmail()) || repository.existsByPhoneNumber(dto.getPhoneNumber())) {
+            response.setSuccess(false);
+            response.setMes("Thất bại");
+        } else {
+            UserEntity entity = encryptAndDecryptUtil.encryptAll(mapper.map(dto, UserEntity.class));
+            Map<String, String> keys = rsa.generateKey();
+            entity.setPublicKey(keys.get("public_key"));
+            entity.setPrivateKey(keys.get("private_key"));
+            repository.save(entity);
+            response.setSuccess(true);
+            response.setMes("Thành công");
+        }
+        return response;
+    }
+
+    @Override
+    public UserDTO update(UserDTO dto, String token) {
+        UserDTO response = new UserDTO();
+        dto.setPassword(jwtUtil.extractPass(token));
+        Optional<UserEntity> optional = repository.findById(dto.getCitizenIdentificationNumber());
+        if (optional.isEmpty()) {
+            response.setSuccess(false);
+            response.setMes("Thất bại");
+        } else {
+            UserEntity entity = encryptAndDecryptUtil.encryptAll(mapper.map(dto, UserEntity.class));
+            entity.setPublicKey(optional.get().getPublicKey());
+            entity.setPrivateKey(optional.get().getPrivateKey());
+            repository.save(entity);
+            response.setSuccess(true);
+            response.setMes("Thành công");
+        }
+        return response;
     }
 
     @Override
     public UserDTO login(UserDTO dto) {
-            UserDTO response = new UserDTO();
-            Optional<UserEntity> optional = repository.findById(dto.getCitizenIdentificationNumber());
-            if(optional.isEmpty()) {
+        UserDTO response = new UserDTO();
+        Optional<UserEntity> optional = repository.findById(dto.getCitizenIdentificationNumber());
+        if (optional.isEmpty()) {
+            response.setSuccess(false);
+            response.setMes("Thất bại");
+        } else {
+            if (encryptAndDecryptUtil.checkPassword(optional.get(), dto)) {
+                response.setCitizenIdentificationNumber(optional.get().getCitizenIdentificationNumber());
+                response.setToken(jwtUtil.generateToken(dto.getCitizenIdentificationNumber(), dto.getPassword()));
+                response.setSuccess(true);
+                response.setMes("Thành công");
+            } else {
                 response.setSuccess(false);
                 response.setMes("Thất bại");
-            }else {
-                if(encryptAndDecryptUtil.checkPassword(optional.get(), dto)) {
-                    response.setCitizenIdentificationNumber(optional.get().getCitizenIdentificationNumber());
-                    response.setToken(jwtUtil.generateToken(dto.getCitizenIdentificationNumber(), dto.getPassword()));
-                    response.setSuccess(true);
-                    response.setMes("Thành công");
-                }else {
-                    response.setSuccess(false);
-                    response.setMes("Thất bại");
-                }
             }
+        }
         return response;
     }
 
@@ -125,11 +141,12 @@ public class UserServiceImpl implements UserService{
     public UserDTO findById(UserDTO dto) {
         UserDTO response;
         dto.setPassword(jwtUtil.extractPass(dto.getToken()));
-        Optional<UserEntity> entity = repository.findByCitizenIdentificationNumber(dto.getCitizenIdentificationNumber());
-        if(entity.isEmpty()) {
+        Optional<UserEntity> entity = repository
+                .findByCitizenIdentificationNumber(dto.getCitizenIdentificationNumber());
+        if (entity.isEmpty()) {
             response = UserDTO.builder().success(false).build();
-        }else {
-            UserDTO decrypt = encryptAndDecryptUtil.decryptAll(entity.get() ,dto);
+        } else {
+            UserDTO decrypt = encryptAndDecryptUtil.decryptAll(entity.get(), dto);
             response = UserDTO.builder().individual(decrypt).success(true).build();
         }
         return response;
@@ -138,7 +155,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
         Optional<UserEntity> entity = repository.findByCitizenIdentificationNumber(id);
-        return entity.map(UserDetail::new) 
-            .orElseThrow(() -> new UsernameNotFoundException("User not found " + id));
+        return entity.map(UserDetail::new)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found " + id));
     }
 }

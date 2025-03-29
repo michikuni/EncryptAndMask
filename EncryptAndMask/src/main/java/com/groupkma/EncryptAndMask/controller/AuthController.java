@@ -5,10 +5,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class AuthController {
-
+    
+    @GetMapping("/")
+    public String start() {
+        return "start";
+    }
     @GetMapping("/signin")
     public String signin() {
-        return "signin"; // Trả về tên file login.html trong templates/
+        return "signin"; 
     }
 
     @GetMapping("/signup")
@@ -20,4 +24,5 @@ public class AuthController {
     public String home() {
         return "home";
     }
+
 }

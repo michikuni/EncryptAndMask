@@ -43,6 +43,7 @@ public class EncryptAndDecryptUtil {
         return entity;
     }
 
+
     public UserDTO decryptAll(UserEntity entity, UserDTO dto) {
         String iv = dto.getPassword();
         UserDTO newDTO = new UserDTO();
