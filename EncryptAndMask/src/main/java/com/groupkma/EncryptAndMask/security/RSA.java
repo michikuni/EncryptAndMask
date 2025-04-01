@@ -89,7 +89,7 @@ public class RSA {
                 break;
             }
         }
-        for (i = ZERO; i.compareTo(new BigInteger("9")) <= 0; i = i.add(ONE)) {
+        for (i = ZERO; i.compareTo(new BigInteger("1000000000")) <= 0; i = i.add(ONE)) {
             BigInteger x = ONE.add(i.multiply(z));
             if (x.remainder(e).equals(ZERO)) {
                 d = x.divide(e);
@@ -97,9 +97,9 @@ public class RSA {
             }
         }
         String publicKey = "e:" + e.toString() + ",n:" + n.toString();
-        String privateKye = "d:" + d.toString() + ",n:" + n.toString();
+        String privateKey = "d:" + d.toString() + ",n:" + n.toString();
         keys.put("public_key", stringTextToHexa(publicKey));
-        keys.put("private_key", stringTextToHexa(privateKye));
+        keys.put("private_key", stringTextToHexa(privateKey));
         return keys;
     }
 

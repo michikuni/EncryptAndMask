@@ -24,3 +24,8 @@ body {
 .table th, .table td {
     vertical-align: middle;
 }
+
+.table-container {
+    max-height: 446px;
+    overflow-y: auto;
+}
