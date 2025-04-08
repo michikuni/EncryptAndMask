@@ -440,6 +440,9 @@ public class AES {
         }
 
         public String encrypt(String plainText, String iv) {
+                long startTime = System.nanoTime();
+                long endTime = System.nanoTime();
+                long duration = endTime - startTime;
                 byte[] ivb = iv.getBytes();
                 ivb = addPKCS7Padding(ivb, BLOCK_SIZE);
                 List<byte[]> blocks;
@@ -452,10 +455,14 @@ public class AES {
                 for (byte[] b : blocks) {
                         rs = mergeArrays(rs, Cipher(b, ivb));
                 }
+                System.out.println("Encrypt time: " + duration + " ns");
                 return byteArrayToHexString(rs);
         }
 
         public String decrypt(String cipherText, String iv) {
+                long startTime = System.nanoTime();
+                long endTime = System.nanoTime();
+                long duration = endTime - startTime;
                 byte[] ivb = iv.getBytes();
                 ivb = addPKCS7Padding(ivb, BLOCK_SIZE);
                 List<byte[]> blocks = splitIntoBlocks(hexStringToByteArray(cipherText));
@@ -463,6 +470,8 @@ public class AES {
                 for (byte[] b : blocks) {
                         rs = mergeArrays(rs, DeCipher(b, ivb));
                 }
+                System.out.println("Decrypt time: " + duration + " ns");
                 return new String(rs);
+
         }
 }

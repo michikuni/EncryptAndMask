@@ -60,7 +60,6 @@ public class JwtAuthFilter extends OncePerRequestFilter{
                     }
                 }
             }
-            System.out.println("Token from cookie: " + token);
         } else {
             token = authHeader;
             System.out.println("Token from header: " + token);
@@ -87,7 +86,7 @@ public class JwtAuthFilter extends OncePerRequestFilter{
                 System.out.println("Token validation failed for user: " + id);
             }
         } else {
-            System.out.println("No valid ID or authentication already exists");
+            System.out.println("");
         }
         filterChain.doFilter(request, response); 
     }
